@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -28,7 +29,20 @@ module.exports = {
         new MiniCssExtractPlugin({
             // здесь тоже поддерживаются шаблоны в строке
             filename: '[name].bundle.css'
-        })
+        }),
+        // а здесь шаблоны не поддерживаются, поэтому придется создавать несколько экземпляров,
+        // но проявите смекалку, как можно это оптимизировать.
+        // Подсказка: это массив с плагинами ;-)
+        new HtmlWebpackPlugin({
+            template: './src/template.html',
+            chunks: ['index'],
+            filename: 'index.html'
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/template.html',
+            chunks: ['about'],
+            filename: 'about.html'
+        }),
     ],
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
