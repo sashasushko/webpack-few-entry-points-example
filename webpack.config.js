@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackMd5Hash = require('webpack-md5-hash');
 
 module.exports = {
     entry: {
@@ -15,7 +16,7 @@ module.exports = {
         // строка в filename поддерживает шаблоны, задаются в квадратных скобках,
         // вместо которых подставляется какое-то значение.
         // Подробнее можно на сайте Вебпака почитать - https://webpack.js.org/configuration/output/
-        filename: '[name].bundle.js'
+        filename: '[name].bundle.js',
     },
     module: {
         rules: [
@@ -26,6 +27,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new WebpackMd5Hash(),
         new MiniCssExtractPlugin({
             // здесь тоже поддерживаются шаблоны в строке
             filename: '[name].bundle.css'
@@ -34,12 +36,16 @@ module.exports = {
         // но проявите смекалку, как можно это оптимизировать.
         // Подсказка: это массив с плагинами ;-)
         new HtmlWebpackPlugin({
-            template: './src/template.html',
+            inject: false,
+            hash: true,
+            template: './src/index.html',
             chunks: ['index'],
             filename: 'index.html'
         }),
         new HtmlWebpackPlugin({
-            template: './src/template.html',
+            inject: false,
+            hash: true,
+            template: './src/about.html',
             chunks: ['about'],
             filename: 'about.html'
         }),
